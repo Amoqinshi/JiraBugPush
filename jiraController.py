@@ -21,7 +21,8 @@ def login_jira(username,password):
     jira = JIRA("http://jira.huanleguang.com",basic_auth=(username,password))
     return jira
 
-# 实例话jira对象
+
+# 实例化jira对象
 a = login_jira(username,password)
 
 
@@ -63,8 +64,6 @@ def getIssueList(today_time,tomorrow_time):
 
 
 # 实例化获取Issue列表对象
-# issueData = getIssueList("2022-10-27", "2022-10-31")
-# issueData = getIssueList("2022-11-03", "2022-11-04")
 issueData = getIssueList(today, tomorrow)
 
 
@@ -85,8 +84,7 @@ def getBugList(issueData):
         bugList = list(zip(bugId,bugSummary,bugCreater,bugCreateTIme,bugUpdateTIme))
         return bugList
 
-# A = getBugList()
-# print(A)
+
 
 def writeBugList(bugData):
     """

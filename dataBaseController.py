@@ -8,11 +8,14 @@
 '''
 import pymysql
 from datetime import date, timedelta
-data_dict = {"host":"localhost",
-             "user":"root",
-             "password":"root123",
+
+
+# 数据库配置
+data_dict = {"host":"xxxxxx",
+             "user":"xxxxxx",
+             "password":"xxxxxx",
              "port":3306,
-             "dataBase":"jiraBug"}
+             "dataBase":"xxxxxx"}
 
 
 
@@ -152,7 +155,5 @@ def deleteTables(values,condition="CREATEDAY"):
 
 
 if __name__=="__main__":
-    # today = date.today()
-    # # print(selectTables(repr(str(today))))
-    # print(selectDistinct(repr(str(today))))
+
     pass

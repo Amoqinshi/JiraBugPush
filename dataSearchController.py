@@ -17,6 +17,10 @@ today = date.today()
 
 
 def dataSearch(values=repr(str(today))):
+    """
+    :param values: 默认当天日期，查询数据库数据
+    :return:
+    """
     todayBug = dataBaseController.selectDistinct(values)
     return todayBug
 
