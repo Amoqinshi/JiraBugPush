@@ -9,13 +9,12 @@
 import pymysql
 from datetime import date, timedelta
 
-
 # 数据库配置
-data_dict = {"host":"xxxxxx",
-             "user":"xxxxxx",
-             "password":"xxxxxx",
-             "port":3306,
-             "dataBase":"xxxxxx"}
+data_dict = {"host":"xxxx",
+             "user":"xxxx",
+             "password":"xxxx",
+             "port":"xxxx",
+             "dataBase":"xxxx"}
 
 
 
@@ -52,12 +51,16 @@ def createTable():
         with db_con.cursor() as cursor:
             sql = """CREATE TABLE NewIncreasedBug(
                                    id int auto_increment,
-                                   bugId varchar(120),
-                                   bugName varchar(120),
+                                   bugId varchar(120) UNIQUE,
+                                   bugSummary varchar(120),
                                    createBy varchar(20),
+                                   assignerBy varchar(20),
+                                   status varchar(20),
+                                   bugUrl  varchar(60),
                                    createDay date,
                                    updateDay date,
-                                   primary key (id))"""
+                                   primary key (id))
+                                   """
             cursor.execute(sql)
             db_con.commit()
             return "新表创建成功"
@@ -66,7 +69,7 @@ def createTable():
         db_con.rollback()
 
 
-def insertTables(data):
+def insertTables(data=None):
     """
     :param connect:
     :param table:
@@ -75,7 +78,7 @@ def insertTables(data):
     """
     try:
         with db_con.cursor() as cursor:
-            sql = """INSERT INTO NewIncreasedBug (bugId, bugName, createBy, createDay, updateDay)
+            sql = """INSERT ignore INTO NewIncreasedBug (bugId, bugSummary, createBy, assignerBy,status, bugUrl, createDay, updateDay)
                         VALUES {}""".format(data)
             cursor.execute(sql)
             db_con.commit()
@@ -94,7 +97,7 @@ def selectTables(values,condition="CREATEDAY"):
     """
     try:
         with db_con.cursor() as cursor:
-            sql = """SELECT *  FROM  NewIncreasedBug WHERE {} = {} ORDER BY CREATEDAY DESC""".format(condition,values)
+            sql = """SELECT *  FROM  NewIncreasedBug WHERE {} = {} """.format(condition,values)
             cursor.execute(sql)
             all = cursor.fetchall()
             return all
@@ -110,7 +113,7 @@ def selectAll():
     """
     try:
         with db_con.cursor() as cursor:
-            sql = """SELECT distinct bugId,bugName,createBy,createDay,updateDay from NewIncreasedBug """
+            sql = """SELECT * from NewIncreasedBug """
             cursor.execute(sql)
             all = cursor.fetchall()
             return all
@@ -118,7 +121,7 @@ def selectAll():
         db_con.rollback()
 
 
-def selectDistinct(values,condition="CREATEDAY"):
+def selectDistinct(values,condition="UPDATEDAY"):
     """
     :param connect:
     :param table:
@@ -127,7 +130,7 @@ def selectDistinct(values,condition="CREATEDAY"):
     """
     try:
         with db_con.cursor() as cursor:
-            sql = """SELECT distinct bugId,bugName,createBy,createDay,updateDay  FROM  NewIncreasedBug  WHERE {} = {} 
+            sql = """SELECT distinct bugId,bugSummary,createBy,assignerBy,status,bugUrl,createDay,updateDay  FROM  NewIncreasedBug  WHERE {} = {} 
                     """.format(condition,values)
             cursor.execute(sql)
             all = cursor.fetchall()
@@ -135,7 +138,7 @@ def selectDistinct(values,condition="CREATEDAY"):
     except:
         db_con.rollback()
 
-def deleteTables(values,condition="CREATEDAY"):
+def deleteTables(values,condition="UPDATEDAY"):
     """
     :param connect:
     :param table:
@@ -156,4 +159,5 @@ def deleteTables(values,condition="CREATEDAY"):
 
 if __name__=="__main__":
 
+    print(createTable())
     pass

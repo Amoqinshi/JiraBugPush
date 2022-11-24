@@ -10,10 +10,12 @@ from jira import JIRA
 from datetime import date, timedelta
 import dataBaseController
 import time,datedays
+import schedule
 
 
-username = "qinshi"
-password = "909090yh"
+
+username = "xxxxxxxxx"
+password = "xxxxxxxx"
 
 
 # 连接jira服务地址
@@ -21,8 +23,7 @@ def login_jira(username,password):
     jira = JIRA("http://jira.huanleguang.com",basic_auth=(username,password))
     return jira
 
-
-# 实例化jira对象
+# 实例话jira对象
 a = login_jira(username,password)
 
 
@@ -57,56 +58,55 @@ def getIssueList(today_time,tomorrow_time):
     :param tomorrow_time: 明天
     :return: 根据时间范围爬去创建的bug列表
     """
-    issue_list = a.search_issues("project = {} AND issuetype in (线上问题, 转测问题) AND status = 问题-新  AND created >= {} AND created <= {} "
-                                 # "order by created DESC".format("NEBULA", "2022-10-29", "2022-10-30"))
-                                 "order by created DESC".format("NEBULA", today_time, tomorrow_time))
+    issue_list = a.search_issues("project = {} AND issuetype in (体验走查, 线上问题, 转测问题) AND resolution was not 非问题 AND created >= {} AND created <= {} "
+                                 "".format("NEBULA", today_time, tomorrow_time))
     return issue_list
 
 
 # 实例化获取Issue列表对象
 issueData = getIssueList(today, tomorrow)
 
-
-
 def getBugList(issueData):
     """
     :return: 解析bug数据
     """
-    if len(issueData) == 0 :
-        print("jiraBug数据获取为空")
-    else:
-        print("jiraBug数据正常获取")
+    jiraHost = "https://jira.huanleguang.com/browse/"
+    if len(issueData) !=0 :
         bugId = [issue.key for issue in issueData]
-        bugSummary =  [issue.fields.summary for issue in issueData]
-        bugCreater =  [issue.fields.reporter.name for issue in issueData]
-        bugCreateTIme =  [(issue.fields.created)[:10] for issue in issueData]
-        bugUpdateTIme =  [(issue.fields.updated)[:10] for issue in issueData]
-        bugList = list(zip(bugId,bugSummary,bugCreater,bugCreateTIme,bugUpdateTIme))
+        bugSummary = [issue.fields.summary for issue in issueData]
+        bugCreater = [issue.fields.reporter.name for issue in issueData]    #
+        bugAssigner = [issue.fields.assignee.name if issue.fields.assignee else "null" for issue in issueData ]
+        bugStatus = [issue.fields.status.name for issue in issueData]
+        bugLinkUrl = [jiraHost + issue.key for issue in issueData]
+        bugCreateTIme = [(issue.fields.created)[:10] for issue in issueData]
+        bugUpdateTIme = [(issue.fields.updated)[:10] for issue in issueData]
+        bugList = list(zip(bugId, bugSummary, bugCreater, bugAssigner,bugStatus, bugLinkUrl, bugCreateTIme, bugUpdateTIme))
         return bugList
-
-
-
-def writeBugList(bugData):
-    """
-    :return: 写入数据
-    """
-    for  x in bugData:
-        time.sleep(1)
-        dataBaseController.insertTables(x)
-    print ("==============数据写入完成===================")
-
-
-def runJiraTask():
-    data = getBugList(issueData)
-    time.sleep(2)
-    if data is not None:
-        writeBugList(data)
-        return 1
     else:
-        print("==============今日无数据写入==================")
         return 0
 
 
-if __name__=="__main__":
+def writeBugList(data):
+    """
+    :return: 写入数据
+    """
 
+    for data_ in data:
+        dataBaseController.insertTables(data_)
+
+
+def runJiraTask():
+
+    issueData = getIssueList(today, tomorrow)
+    data = getBugList(issueData)
+    print("data:",data)
+    time.sleep(1)
+    if data != 0 :
+        writeBugList(data)
+        return 1
+    else:
+        pass
+
+
+if __name__=="__main__":
     pass

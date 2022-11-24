@@ -2,9 +2,9 @@
 # -*- coding: UTF-8 -*-
 '''
 @Project ：DoPython 
-@File ：run.py
+@File ：runMain.py
 @Author ：琴师
-@Date ：2022/10/28 12:51 下午 
+@Date ：2022/11/8 2:16 下午
 '''
 from  jiraController import runJiraTask
 from  dingController import send_request
@@ -19,24 +19,22 @@ import time
 # 今天
 today = date.today()
 
+# 每59分钟执行jira问题爬取的定时任务
+schedule.every(59).minutes.do(runJiraTask)
+# 每天下午18：00定时发送钉钉
+schedule.every().day.at("18:00").do(send_request)
+
 
 def main():
+    """
+    :return:
+    """
 
-    job = schedule.every().day.at("15:00").do(send_request)
-    job1 = schedule.every().day.at("17:00").do(send_request)
-    job2 = schedule.every().day.at("18:00").do(send_request)
-    if runJiraTask() ==1:
-        while True:
-            if  len(dataSearch()) > 0:
-                schedule.run_pending()
-                time.sleep(1)
-            else:
-                schedule.cancel_job(job)
-                schedule.cancel_job(job1)
-                schedule.cancel_job(job2)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
-    else:
-        pass
+
 
 
 if __name__=="__main__":

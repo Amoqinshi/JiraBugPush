@@ -48,7 +48,7 @@ today = date.today()
 
 
 def getRequestUri():
-    access_token = "852ce2e2435b6d1faaaaf6969f3c2f68da10e1f5ae4f74931fce391a96ae4a3d"
+    access_token = "52097df2c2495xxxxxxxxxxxxxxxxxx"
     # uri = "https://oapi.dingtalk.com/robot/send?" + "access_token=%s"%access_token + \
     #       "&" + "timestamp=%s"%time + "&" + "sign=%s"%sign
     uri = "https://oapi.dingtalk.com/robot/send?" + "access_token=%s" % access_token
@@ -57,26 +57,25 @@ def getRequestUri():
 
 def getRequestData(nums):
         my_data = {
-            "msgtype": "text",
-            "text": {
+            "msgtype": "markdown",
+            "markdown": {
                 "title": "JIRA",
-                "content": "我就是我, 是不一样的烟火"
+                "text": "我就是我, 是不一样的烟火"
             },
             "at": {
-
                 "isAtAll": True
             }
         }
         if len(nums):
             summary = "\n"
             for x in nums:
-                summary += x[1]+"\n"+"，"+"创建人："+x[2]+"\n"
-                res_content = "今日新增问题:{}个,具体问题如下：{}".format(len(nums),summary)
-                my_data["text"]["content"] = res_content
+                summary += x[6] + "\t\t\t"+ "经办人："+x[4] +"\n"+"状态："+x[5]  + "\n"
+                res_content = "今日新增问题:{}个，具体问题如下：{}".format(len(nums),summary)
+                my_data["markdown"]["text"] = res_content
             return my_data
         else:
             res_content = "今日新增问题:{}个".format(len(nums))
-            my_data["text"]["text"] = res_content
+            my_data["markdown"]["text"] = res_content
             return my_data
 
 
@@ -87,16 +86,16 @@ def send_request():
     # 构建一下请求头部
     header = {"content-Type": "application/json", "Charset": "UTF-8",
               "timestamp": str(round(time.time() * 1000))}
-    sendData = json.dumps(getRequestData(dataSearchController.dataSearch()))  # 将字典类型数据转化为json格式
+    sendData = json.dumps(getRequestData(dataSearchController.dataSearch())) # 将字典类型数据转化为json格式
     res = requests.post(url=getRequestUri(), data=sendData, headers=header,verify=False)
     # 将请求发回的数据构建成为文件格式
-    print(res.json())
     return res.json()
 
 
 if __name__=="__main__":
 
     pass
+
 
 
 
