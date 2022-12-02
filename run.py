@@ -19,9 +19,9 @@ import time
 # 今天
 today = date.today()
 
-# 每59分钟执行jira问题爬取的定时任务
-schedule.every(59).minutes.do(runJiraTask)
-# 每天下午18：00定时发送钉钉
+# 每小时执行jira问题爬取的定时任务
+schedule.every().hour.do(runJiraTask)
+# 每天18：00定时发送钉钉
 schedule.every().day.at("18:00").do(send_request)
 
 

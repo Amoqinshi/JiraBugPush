@@ -78,7 +78,7 @@ def insertTables(data=None):
     """
     try:
         with db_con.cursor() as cursor:
-            sql = """INSERT ignore INTO NewIncreasedBug (bugId, bugSummary, createBy, assignerBy,status, bugUrl, createDay, updateDay)
+            sql = """REPLACE INTO NewIncreasedBug (bugId, bugSummary, createBy, assignerBy,status, bugUrl, createDay, updateDay)
                         VALUES {}""".format(data)
             cursor.execute(sql)
             db_con.commit()
@@ -88,7 +88,7 @@ def insertTables(data=None):
         db_con.rollback()
 
 
-def selectTables(values,condition="CREATEDAY"):
+def selectTables(values,condition="UPDATEDAY"):
     """
     :param connect:
     :param table:
