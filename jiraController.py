@@ -58,7 +58,7 @@ def getIssueList(today_time,tomorrow_time):
     :param tomorrow_time: 明天
     :return: 根据时间范围爬去创建的bug列表
     """
-    issue_list = a.search_issues("project = {} AND issuetype in (体验走查, 线上问题, 转测问题) AND resolution was not 非问题 AND created >= {} AND created <= {} "
+    issue_list = a.search_issues("project = {} AND issuetype in (体验走查, 线上问题, 转测问题) AND resolution was not 非问题 AND updated >= {} AND updated <= {} "
                                  "".format("NEBULA", today_time, tomorrow_time))
     return issue_list
 
@@ -100,7 +100,6 @@ def runJiraTask():
     issueData = getIssueList(today, tomorrow)
     data = getBugList(issueData)
     print("data:",data)
-    time.sleep(1)
     if data != 0 :
         writeBugList(data)
         return 1

@@ -22,7 +22,7 @@ today = date.today()
 # 每小时执行jira问题爬取的定时任务
 schedule.every().hour.do(runJiraTask)
 # 每天18：00定时发送钉钉
-schedule.every().day.at("18:01").do(send_request)
+schedule.every().day.at("18:00").do(send_request)
 
 
 def main():
