@@ -1,22 +1,19 @@
 # !/usr/bin/env python
 # -*- coding: UTF-8 -*-
-'''
-@Project ：DoPython 
+"""
+@Project ：DoPython
 @File ：dataBaseController.py
 @Author ：琴师
-@Date ：2022/10/27 10:22 上午 
-'''
+@Date ：2022/10/27 10:22 上午
+"""
 import pymysql
-from datetime import date, timedelta
 
 # 数据库配置
-data_dict = {"host":"xxxx",
-             "user":"xxxx",
-             "password":"xxxx",
-             "port":"xxxx",
-             "dataBase":"xxxx"}
-
-
+data_dict = {"host": "localhost",
+             "user": "root",
+             "password": "root123",
+             "port": 3306,
+             "dataBase": "jiraBug"}
 
 
 def connectDatabse():
@@ -32,7 +29,7 @@ def connectDatabse():
         db.ping(reconnect=True)
         print("数据库处于连接中状态")
         return db
-    except:
+    except BaseException:
         connectDatabse()
         print("数据库断开连接，请重新连接数据库")
 
@@ -44,7 +41,6 @@ db_con = connectDatabse()
 # 创建数据库表
 def createTable():
     """
-    :param connect: 传入数据库对象
     :return: 生成表
     """
     try:
@@ -57,6 +53,7 @@ def createTable():
                                    assignerBy varchar(20),
                                    status varchar(20),
                                    bugUrl  varchar(60),
+                                   bugType varchar(20),
                                    createDay date,
                                    updateDay date,
                                    primary key (id))
@@ -65,99 +62,77 @@ def createTable():
             db_con.commit()
             return "新表创建成功"
 
-    except:
+    except BaseException:
         db_con.rollback()
 
 
 def insertTables(data=None):
     """
-    :param connect:
-    :param table:
-    :param kwargs:
+    :param data:
     :return:
     """
     try:
         with db_con.cursor() as cursor:
-            sql = """REPLACE INTO NewIncreasedBug (bugId, bugSummary, createBy, assignerBy,status, bugUrl, createDay, updateDay)
-                        VALUES {}""".format(data)
+            sql = """REPLACE INTO NewIncreasedBug (bugId, bugSummary, createBy, assignerBy,status, bugUrl, bugType, 
+            createDay, updateDay) VALUES {}""".format(data)
             cursor.execute(sql)
             db_con.commit()
             return "表数据插入成功"
 
-    except:
+    except BaseException:
         db_con.rollback()
 
 
-def selectTables(values,condition="UPDATEDAY"):
+def selectType(values, bugtype, condition="UPDATEDAY"):
     """
-    :param connect:
-    :param table:
-    :param kwargs:
+    :param values:
+    :param bugtype:
+    :param condition:
     :return:
     """
     try:
         with db_con.cursor() as cursor:
-            sql = """SELECT *  FROM  NewIncreasedBug WHERE {} = {} """.format(condition,values)
+            sql = """SELECT *  FROM  NewIncreasedBug WHERE {} = {} and bugType = {}""".format(
+                condition, values, repr(bugtype))
             cursor.execute(sql)
             all = cursor.fetchall()
             return all
-    except:
+    except BaseException:
         db_con.rollback()
 
-def selectAll():
+
+def selectTables(values, condition="UPDATEDAY"):
     """
-    :param connect:
-    :param table:
-    :param kwargs:
+    :param values:
+    :param condition:
     :return:
     """
     try:
         with db_con.cursor() as cursor:
-            sql = """SELECT * from NewIncreasedBug """
+            sql = """SELECT * from NewIncreasedBug WHERE {} = {} """.format(
+                condition, values)
             cursor.execute(sql)
             all = cursor.fetchall()
             return all
-    except:
+    except BaseException:
         db_con.rollback()
 
 
-def selectDistinct(values,condition="UPDATEDAY"):
+def deleteTables(values, condition="UPDATEDAY"):
     """
-    :param connect:
-    :param table:
-    :param kwargs:
+    :param values:
+    :param condition:
     :return:
     """
     try:
         with db_con.cursor() as cursor:
-            sql = """SELECT distinct bugId,bugSummary,createBy,assignerBy,status,bugUrl,createDay,updateDay  FROM  NewIncreasedBug  WHERE {} = {} 
-                    """.format(condition,values)
+            sql = """DELETE FROM  NewIncreasedBug WHERE {} = {}""".format(
+                condition, values)
             cursor.execute(sql)
-            all = cursor.fetchall()
-            return all
-    except:
-        db_con.rollback()
-
-def deleteTables(values,condition="UPDATEDAY"):
-    """
-    :param connect:
-    :param table:
-    :param kwargs:
-    :return:
-    """
-    try:
-        with db_con.cursor() as cursor:
-            sql = """DELETE FROM  NewIncreasedBug WHERE {} = {}""".format(condition,values)
-            cursor.execute(sql)
-            return ("表数据删除成功")
-    except:
+            return "表数据删除成功"
+    except BaseException:
         db_con.rollback()
 
 
-
-
-
-if __name__=="__main__":
-
-    print(createTable())
+if __name__ == "__main__":
     pass

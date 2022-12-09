@@ -1,14 +1,12 @@
 # !/usr/bin/env python
 # -*- coding: UTF-8 -*-
-'''
-@Project ：DoPython 
+"""
+@Project ：DoPython
 @File ：dataSearchController.py
 @Author ：琴师
-@Date ：2022/10/28 11:47 上午 
-'''
+@Date ：2022/10/28 11:47 上午
+"""
 
-import jiraController
-import dingController
 import dataBaseController
 from datetime import date
 
@@ -16,21 +14,17 @@ from datetime import date
 today = date.today()
 
 
-def dataSearch(values=repr(str(today))):
-    """
-    :param values: 默认当天日期，查询数据库数据
-    :return:
-    """
-    todayBug = dataBaseController.selectDistinct(values)
+def dataSearchType(values=repr(str(today)), bugtype=None):
+    """查询问题类型"""
+    todayBug = dataBaseController.selectType(values, bugtype)
     return todayBug
 
 
+def dataSearch(values=(repr(str(today)))):
+    """查询问题总数"""
+    todayBug = dataBaseController.selectTables(values)
+    return todayBug
 
 
-
-if __name__=="__main__":
-
+if __name__ == "__main__":
     pass
-
-
-
