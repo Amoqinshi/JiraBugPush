@@ -20,8 +20,8 @@ today = date.today()
 
 
 def getRequestUri():
-    access_token = "52097df2c2495168c6918c7c5ac468d9b14d8361753fe87aef63cc6ebd9fbf51"
-    uri = "https://oapi.dingtalk.com/robot/send?" + "access_token=%s" % access_token
+    access_token = "52097df2c2495168c6918c7c5ac468d9b14d8361753fe87axxxxxx"
+    uri = "https://oapi.xxxxxxx?" + "access_token=%s" % access_token
     return uri
 
 

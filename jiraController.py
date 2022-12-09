@@ -13,13 +13,13 @@ import time
 import datedays
 
 
-username = "qinshi"
-password = "909090yh"
+username = "xxxxxx"
+password = "xxxxxx"
 
 
 # 连接jira服务地址
 def login_jira(userName, passWord):
-    jira = JIRA("http://jira.huanleguang.com", basic_auth=(userName, passWord))
+    jira = JIRA("http://jira.xxxxxx.com", basic_auth=(userName, passWord))
     return jira
 
 
@@ -75,7 +75,7 @@ def getBugList(issueData):
     """
     :return: 解析bug数据
     """
-    jiraHost = "https://jira.huanleguang.com/browse/"
+    jiraHost = "https://jira.xxxxxx.com/browse/"
     if len(issueData) != 0:
         bugId = [issue.key for issue in issueData]
         bugSummary = [issue.fields.summary for issue in issueData]

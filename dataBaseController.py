@@ -9,11 +9,11 @@
 import pymysql
 
 # 数据库配置
-data_dict = {"host": "localhost",
-             "user": "root",
-             "password": "root123",
+data_dict = {"host": "xxxxxx",
+             "user": "xxxxxx",
+             "password": "xxxxxx",
              "port": 3306,
-             "dataBase": "jiraBug"}
+             "dataBase": "xxxxxx"}
 
 
 def connectDatabse():
