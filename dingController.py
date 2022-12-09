@@ -1,7 +1,7 @@
 # !/usr/bin/env python
 # -*- coding: UTF-8 -*-
 """
-@Project ：DoPython
+@Project ：JiraBugPush
 @File ：dingController.py
 @Author ：琴师
 @Date ：2022/10/28 10:19 上午

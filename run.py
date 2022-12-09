@@ -1,8 +1,8 @@
 # !/usr/bin/env python
 # -*- coding: UTF-8 -*-
 """
-@Project ：DoPython
-@File ：runMain.py
+@Project ：JiraBugPush
+@File ：run.py
 @Author ：琴师
 @Date ：2022/11/8 2:16 下午
 """
